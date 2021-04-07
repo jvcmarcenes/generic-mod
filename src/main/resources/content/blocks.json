@@ -8,7 +8,7 @@
       "harvest_level": 1,
       "harvest_tool": "pickaxe",
       "requires_tool": true,
-      "light_level": 15
+      "light_level": 2
     }
   ]
 }

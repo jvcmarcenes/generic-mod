@@ -15,12 +15,17 @@ import io.github.jvcmarcenes.example.ExampleMod;
 import io.github.jvcmarcenes.example.util.DeserializationHelper;
 import io.github.jvcmarcenes.example.util.MathHelper;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.AbstractBlock.IExtendedPositionPredicate;
 import net.minecraft.block.AbstractBlock.Properties;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -65,6 +70,13 @@ public class ModBlocks {
         if (jsonBlock.containsKey("harvest_level")) props.harvestLevel((int)jsonBlock.get("harvest_level"));
         if (jsonBlock.containsKey("harvest_tool")) props.harvestTool(ToolType.get((String)jsonBlock.get("harvest_tool")));
         if (jsonBlock.containsKey("requires_tool") && (boolean)jsonBlock.get("requires_tool")) props.requiresCorrectToolForDrops();
+
+        if (jsonBlock.containsKey("can_spawn_mobs")) props.isValidSpawn(new IExtendedPositionPredicate<EntityType<?>>(){
+          @Override
+          public boolean test(BlockState p_test_1_, IBlockReader p_test_2_, BlockPos p_test_3_, EntityType<?> p_test_4_) {
+            return (boolean)jsonBlock.get("can_spawn_mobs");
+          }
+        });
 
         if (jsonBlock.containsKey("light_level")) props.lightLevel(state -> MathHelper.clamp(0, (int)jsonBlock.get("light_level"), 15));
 
