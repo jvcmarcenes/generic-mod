@@ -1,0 +1,14 @@
+{
+  "blocks": [
+    {
+      "registry_name": "example_block",
+      "material": "stone",
+      "hardness": 2.0,
+      "resistance": 2.5,
+      "harvest_level": 1,
+      "harvest_tool": "pickaxe",
+      "requires_tool": true,
+      "light_level": 15
+    }
+  ]
+}
