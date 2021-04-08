@@ -7,7 +7,7 @@ public class DeserializationHelper {
   
   public static Material material(String name) {
     try {
-      return (Material)Material.class.getDeclaredField(name).get(null);
+      return (Material)Material.class.getDeclaredField(name.toUpperCase()).get(null);
     } catch (NoSuchFieldException e) {
       e.printStackTrace();
     } catch (SecurityException e) {
@@ -20,7 +20,7 @@ public class DeserializationHelper {
 
   public static SoundType sound(String name) {
     try {
-      return (SoundType)SoundType.class.getDeclaredField(name).get(null);
+      return (SoundType)SoundType.class.getDeclaredField(name.toUpperCase()).get(null);
     } catch (NoSuchFieldException e) {
       e.printStackTrace();
     } catch (SecurityException e) {
