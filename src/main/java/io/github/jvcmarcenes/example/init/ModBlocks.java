@@ -60,25 +60,25 @@ public class ModBlocks {
         if (mat == null) throw new IllegalStateException("Invalid material for block " + registryName);
         Properties props = Properties.of(mat);
 
-        props.strength((float)jsonBlock.get("hardness"), (float)jsonBlock.get("resistance"));
+        props.strength((float)(double)jsonBlock.get("hardness"), (float)(double)jsonBlock.get("resistance"));
         if (jsonBlock.containsKey("sound_type")) {
           SoundType sound = DeserializationHelper.sound((String)jsonBlock.get("sound_type"));
           if (sound == null) throw new IllegalStateException("Invalid sound type for block " + registryName);
           props.sound(sound);
         };
 
-        if (jsonBlock.containsKey("harvest_level")) props.harvestLevel((int)jsonBlock.get("harvest_level"));
+        if (jsonBlock.containsKey("harvest_level")) props.harvestLevel((int)(long)jsonBlock.get("harvest_level"));
         if (jsonBlock.containsKey("harvest_tool")) props.harvestTool(ToolType.get((String)jsonBlock.get("harvest_tool")));
         if (jsonBlock.containsKey("requires_tool") && (boolean)jsonBlock.get("requires_tool")) props.requiresCorrectToolForDrops();
 
         if (jsonBlock.containsKey("can_spawn_mobs")) props.isValidSpawn(new IExtendedPositionPredicate<EntityType<?>>(){
           @Override
-          public boolean test(BlockState p_test_1_, IBlockReader p_test_2_, BlockPos p_test_3_, EntityType<?> p_test_4_) {
+          public boolean test(BlockState state, IBlockReader world, BlockPos pos, EntityType<?> entity) {
             return (boolean)jsonBlock.get("can_spawn_mobs");
           }
         });
 
-        if (jsonBlock.containsKey("light_level")) props.lightLevel(state -> MathHelper.clamp(0, (int)jsonBlock.get("light_level"), 15));
+        if (jsonBlock.containsKey("light_level")) props.lightLevel(state -> MathHelper.clamp(0, (int)(long)jsonBlock.get("light_level"), 15));
 
         MAP.put(registryName, register(registryName, () -> new Block(props)));
       });
@@ -102,7 +102,7 @@ public class ModBlocks {
 
   private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> supplier) {
     RegistryObject<T> ret = registerNoItem(name, supplier);
-    ModItems.ITEMS.register(name, () -> new BlockItem(ret.get(), new Item.Properties().tab(ItemGroup.TAB_TRANSPORTATION)));
+    ModItems.ITEMS.register(name, () -> new BlockItem(ret.get(), new Item.Properties().tab(ItemGroup.TAB_BUILDING_BLOCKS)));
     return ret;
   }
   
