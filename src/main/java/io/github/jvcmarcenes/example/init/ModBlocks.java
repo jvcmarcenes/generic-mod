@@ -68,7 +68,7 @@ public class ModBlocks {
         };
 
         if (jsonBlock.containsKey("harvest_level")) props.harvestLevel((int)(long)jsonBlock.get("harvest_level"));
-        if (jsonBlock.containsKey("harvest_tool")) props.harvestTool(ToolType.get((String)jsonBlock.get("harvest_tool")));
+        if (jsonBlock.containsKey("harvest_tool")) props.harvestTool(ToolType.get(((String)jsonBlock.get("harvest_tool")).toLowerCase()));
         if (jsonBlock.containsKey("requires_tool") && (boolean)jsonBlock.get("requires_tool")) props.requiresCorrectToolForDrops();
 
         if (jsonBlock.containsKey("can_spawn_mobs")) props.isValidSpawn(new IExtendedPositionPredicate<EntityType<?>>(){
