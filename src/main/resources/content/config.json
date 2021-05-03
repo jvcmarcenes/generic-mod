@@ -1,0 +1,9 @@
+{
+  "item_groups": [
+    {
+      "name": "example",
+      "icon_type": "block",
+      "icon_location": "example_block"
+    }
+  ]
+}

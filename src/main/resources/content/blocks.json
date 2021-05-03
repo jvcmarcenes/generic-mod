@@ -8,7 +8,44 @@
       "harvest_level": 1,
       "harvest_tool": "pickaxe",
       "requires_tool": true,
-      "light_level": 2
+      "light_level": 2,
+      "tab": "example"
+    },
+    {
+      "registry_name": "example_stairs",
+      "material": "stone",
+      "hardness": 2.0,
+      "resistance": 2.5,
+      "harvest_level": 1,
+      "harvest_tool": "pickaxe",
+      "requires_tool": true,
+      "light_level": 2,
+      "blockstate": "stair",
+      "stair_block": "example_block",
+      "tab": "example"
+    },
+    {
+      "registry_name": "example_slab",
+      "material": "stone",
+      "hardness": 2.0,
+      "resistance": 2.5,
+      "harvest_level": 1,
+      "harvest_tool": "pickaxe",
+      "requires_tool": true,
+      "light_level": 2,
+      "blockstate": "slab",
+      "tab": "example"
+    },
+    {
+      "registry_name": "example_door",
+      "material": "stone",
+      "hardness": 2.0,
+      "resistance": 2.5,
+      "harvest_level": 1,
+      "harvest_tool": "pickaxe",
+      "requires_tool": true,
+      "blockstate": "door",
+      "tab": "example"
     }
   ]
 }

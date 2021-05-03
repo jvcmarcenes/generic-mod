@@ -16,7 +16,10 @@ import io.github.jvcmarcenes.example.util.DeserializationHelper;
 import io.github.jvcmarcenes.example.util.MathHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.DoorBlock;
+import net.minecraft.block.SlabBlock;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.StairsBlock;
 import net.minecraft.block.AbstractBlock.IExtendedPositionPredicate;
 import net.minecraft.block.AbstractBlock.Properties;
 import net.minecraft.block.material.Material;
@@ -24,6 +27,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.TallBlockItem;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.ToolType;
@@ -35,7 +39,7 @@ public class ModBlocks {
 
   public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ExampleMod.MOD_ID);
 
-  private static final Hashtable<String, RegistryObject<Block>> MAP = new Hashtable<>();
+  public static final Hashtable<String, RegistryObject<Block>> MAP = new Hashtable<>();
 
   @SuppressWarnings("unchecked")
   private static void registerBlocks() {
@@ -80,7 +84,32 @@ public class ModBlocks {
 
         if (jsonBlock.containsKey("light_level")) props.lightLevel(state -> MathHelper.clamp(0, (int)(long)jsonBlock.get("light_level"), 15));
 
-        MAP.put(registryName, register(registryName, () -> new Block(props)));
+        ItemGroup tab = DeserializationHelper.tab((String)jsonBlock.get("tab"));
+
+        if (jsonBlock.containsKey("blockstate")) {
+          switch (((String)jsonBlock.get("blockstate")).toLowerCase()) {
+            case "stair":
+              String blockRL = (String)jsonBlock.get("stair_block");
+              MAP.put(registryName, register(registryName, () -> new StairsBlock(() -> MAP.get(blockRL).get().defaultBlockState(), props), tab));
+              break;
+            case "slab":
+              MAP.put(registryName, register(registryName, () -> new SlabBlock(props), tab));
+              break;
+            case "door":
+              RegistryObject<Block> block = registerNoItem(registryName, () -> new DoorBlock(props));
+              ModItems.ITEMS.register(registryName, () -> new TallBlockItem(block.get(), new Item.Properties().tab(tab).stacksTo(16)));
+              MAP.put(registryName, block);
+              break;
+            case "none":
+              MAP.put(registryName, register(registryName, () -> new Block(props), tab));
+              break;
+            default:
+              throw new IllegalStateException("Invalid blockstate type for block " + registryName);
+          }
+        } else {
+          MAP.put(registryName, register(registryName, () -> new Block(props), tab));
+        }
+
       });
 
     } catch (FileNotFoundException e) {
@@ -100,9 +129,9 @@ public class ModBlocks {
     return BLOCKS.register(name, supplier);
   }
 
-  private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> supplier) {
+  private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> supplier, ItemGroup tab) {
     RegistryObject<T> ret = registerNoItem(name, supplier);
-    ModItems.ITEMS.register(name, () -> new BlockItem(ret.get(), new Item.Properties().tab(ItemGroup.TAB_BUILDING_BLOCKS)));
+    ModItems.ITEMS.register(name, () -> new BlockItem(ret.get(), new Item.Properties().tab(tab)));
     return ret;
   }
   
